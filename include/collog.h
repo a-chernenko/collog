@@ -146,6 +146,6 @@ class color_log : public detail::logstream {
     }
     return *this;
   }
-};  // namespace InSys
+};
 
 }  // namespace collog
