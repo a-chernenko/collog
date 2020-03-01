@@ -1,0 +1,3 @@
+[submodule "CoNCoL"]
+	path = CoNCoL
+	url = https://github.com/a-chernenko/CoNCoL.git
