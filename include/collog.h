@@ -52,11 +52,12 @@ class logstream {
  protected:
   std::ostream _log;
 
- public:
   logstream(bool log_enable)
       : logstream{(log_enable) ? std::cout.rdbuf() : nullptr} {}
   logstream(std::streambuf *buf_ptr = {}) : _log{buf_ptr} {}
   ~logstream() noexcept = default;
+
+ public:
   static void mute(bool muted) noexcept { _muted = muted; }
   static bool is_mute() noexcept { return _muted; }
   template <typename Type>
@@ -73,7 +74,6 @@ class logstream {
     return *this;
   }
 #ifndef CONCOL_NO_STRING_VIEW
-
   logstream &operator<<(const std::string_view &rhs) {
     if (!_muted && _enabled) {
       concol::color::printf(rhs);
@@ -117,14 +117,14 @@ class color_log : public detail::logstream {
   logstream &stream{*this};
   template <typename Type>
   logstream &operator<<(Type &&rhs) {
-    if (!logstream::is_mute() && logstream::is_enabled()) {
+    if (!is_mute() && is_enabled()) {
       print_header();
       _log << std::forward<Type>(rhs);
     }
     return *this;
   }
   logstream &operator<<(std::string &&rhs) {
-    if (!logstream::is_mute() && logstream::is_enabled()) {
+    if (!is_mute() && is_enabled()) {
       print_header();
       concol::color::printf(rhs.c_str());
     }
@@ -132,7 +132,7 @@ class color_log : public detail::logstream {
   }
 #ifndef CONCOL_NO_STRING_VIEW
   logstream &operator<<(std::string_view &&rhs) {
-    if (!logstream::is_mute() && logstream::is_enabled()) {
+    if (!is_mute() && is_enabled()) {
       print_header();
       concol::color::printf(rhs.data());
     }
@@ -140,7 +140,7 @@ class color_log : public detail::logstream {
   }
 #endif
   logstream &operator<<(const char *rhs) {
-    if (!logstream::is_mute() && logstream::is_enabled()) {
+    if (!is_mute() && is_enabled()) {
       print_header();
       concol::color::printf(rhs);
     }
