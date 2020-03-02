@@ -27,7 +27,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #if __cplusplus < 201103L
 #error \
-    "This file requires compiler and library support for the ISO C++ 2011 standard or higher."
+    "This file requires compiler and library support for the ISO C++ 2011 standard or later."
 #endif
 
 #include <iostream>
