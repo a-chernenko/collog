@@ -42,11 +42,6 @@ namespace collog {
 namespace detail {
 
 class logstream {
-#if __cplusplus < 201703L
- static bool _muted;
-#else
- inline static bool _muted{};
-#endif
   bool _enabled{};
 
  protected:
@@ -58,31 +53,29 @@ class logstream {
   ~logstream() noexcept = default;
 
  public:
-  static void mute(bool muted) noexcept { _muted = muted; }
-  static bool is_mute() noexcept { return _muted; }
   template <typename Type>
   logstream &operator<<(Type &&rhs) {
-    if (!_muted && _enabled) {
+    if (_enabled) {
       _log << std::forward<Type>(rhs);
     }
     return *this;
   }
   logstream &operator<<(std::string &&rhs) {
-    if (!_muted && _enabled) {
+    if (_enabled) {
       concol::color::printf(rhs);
     }
     return *this;
   }
 #ifndef CONCOL_NO_STRING_VIEW
   logstream &operator<<(const std::string_view &rhs) {
-    if (!_muted && _enabled) {
+    if (_enabled) {
       concol::color::printf(rhs);
     }
     return *this;
   }
 #endif
   logstream &operator<<(const char *rhs) {
-    if (!_muted && _enabled) {
+    if (_enabled) {
       concol::color::printf(rhs);
     }
     return *this;
@@ -117,14 +110,14 @@ class color_log : public detail::logstream {
   logstream &stream{*this};
   template <typename Type>
   logstream &operator<<(Type &&rhs) {
-    if (!is_mute() && is_enabled()) {
+    if (is_enabled()) {
       print_header();
       _log << std::forward<Type>(rhs);
     }
     return *this;
   }
   logstream &operator<<(std::string &&rhs) {
-    if (!is_mute() && is_enabled()) {
+    if (is_enabled()) {
       print_header();
       concol::color::printf(rhs.c_str());
     }
@@ -132,7 +125,7 @@ class color_log : public detail::logstream {
   }
 #ifndef CONCOL_NO_STRING_VIEW
   logstream &operator<<(std::string_view &&rhs) {
-    if (!is_mute() && is_enabled()) {
+    if (is_enabled()) {
       print_header();
       concol::color::printf(rhs.data());
     }
@@ -140,7 +133,7 @@ class color_log : public detail::logstream {
   }
 #endif
   logstream &operator<<(const char *rhs) {
-    if (!is_mute() && is_enabled()) {
+    if (is_enabled()) {
       print_header();
       concol::color::printf(rhs);
     }

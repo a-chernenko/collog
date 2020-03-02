@@ -11,4 +11,4 @@ set(SOURCES ${SOURCE_DIR}/test_collog.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} collog concol)
+target_link_libraries(${PROJECT_NAME} concol)

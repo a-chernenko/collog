@@ -72,13 +72,12 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) try {
   log.set_enabled(true);
   log << "log is enable\n";
 
-  collog::color_log::mute(true);
-  log << "log is muted\n";
-  collog::color_log::mute(false);
-
   color::set_enabled(true);
   log << "{+white}message {+cyan}with header ";
   log.stream << "{+white}and message {+yellow}without header{}\n";
+  log << color_tags::magenta_bright << "warning: ";
+  log.stream << color_tags::cyan_bright << "test is over."; 
+  log.stream << color_tags::reset;
   return 0;
 } catch (...) {
   std::cerr << "\nunexpected exception\n";
