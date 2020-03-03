@@ -1,2 +1,2 @@
 # CoLLoG
-CoLor LoGger it is a simple crossplatform (Windows/Linux) C++ header only library for colorized log output.
+CoLor LoGger it is a simple crossplatform (Windows/Linux) C++ header only library for console colorized log output (depend on CoNCoL library).
