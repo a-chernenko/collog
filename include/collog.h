@@ -139,6 +139,17 @@ class color_log : public detail::logstream {
     }
     return *this;
   }
+  void print_error(const std::string &str) {
+    *this << concol::color_type::red_bright << str << concol::color_ctrl::reset;
+  }
+  void print_warning(const std::string &str) {
+    *this << concol::color_type::yellow_bright << str
+          << concol::color_ctrl::reset;
+  }
+  void print_success(const std::string &str) {
+    *this << concol::color_type::green_bright << str
+          << concol::color_ctrl::reset;
+  }
 };
 
 }  // namespace collog
