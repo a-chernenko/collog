@@ -47,9 +47,9 @@ class logstream {
  protected:
   std::ostream _log;
 
-  logstream(bool log_enable)
+  explicit logstream(bool log_enable)
       : logstream{(log_enable) ? std::cout.rdbuf() : nullptr} {}
-  logstream(std::streambuf *buf_ptr = {}) : _log{buf_ptr} {}
+  explicit logstream(std::streambuf *buf_ptr = {}) : _log{buf_ptr} {}
   ~logstream() noexcept = default;
 
  public:
@@ -100,13 +100,13 @@ class color_log : public detail::logstream {
 
  public:
 #ifndef CONCOL_NO_STRING_VIEW
-  color_log(const std::string_view &str, bool enable = true)
+  explicit color_log(const std::string_view &str, bool enable = true)
       : logstream((enable) ? std::cout.rdbuf() : nullptr), _str{str} {}
 #else
-  color_log(const std::string str, bool enable = true)
+  explicit color_log(const std::string str, bool enable = true)
       : logstream((enable) ? std::cout.rdbuf() : nullptr), _str{str} {}
 #endif
-  ~color_log() {}
+  ~color_log() noexcept = default;
   logstream &stream{*this};
   template <typename Type>
   logstream &operator<<(Type &&rhs) {
