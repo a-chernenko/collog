@@ -23,6 +23,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
+#include <chrono>
+#include <thread>
+
 #include "collog.h"
 
 #if __cplusplus < 201402L
@@ -76,12 +79,20 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) try {
   log.print_error("Error message\n");
   log.print_warning("Warning message\n");
   log.print_success("Success message\n");
+  log.print_info("Info message\n");
+  log.print_critical("Critical error message\n");
 
   log << "{+white}message {+cyan}with header ";
   log.stream << "{+white}and message {+yellow}without header{}\n";
-  log << color_tags::magenta_bright << "warning: ";
-  log.stream << color_tags::cyan_bright << "test is over!";
-  log.stream << color_tags::reset;
+
+  for (int step{}, max_step{50}; step <= max_step; ++step) {
+    log.print_progress(step, max_step);
+    std::this_thread::sleep_for(std::chrono::milliseconds(30));
+  }
+  
+  log << color_type::magenta_bright << "test ";
+  log.stream << color_type::cyan_bright << "is {+yellow}over{+red}!!!";
+  log.stream << color_ctrl::reset;
   return 0;
 } catch (...) {
   std::cerr << "\nunexpected exception\n";
