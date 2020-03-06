@@ -139,78 +139,104 @@ class color_log : public detail::logstream {
     }
     return *this;
   }
-  void print_error(const std::string &str) {
+  void print(const std::string &str) {
     if (is_enabled()) {
       _print_header();
-      concol::color color;
-      color.add_red_bright("ERROR: ");
-      color.add(str);
-      color.print();
+      _log << str;
     }
+  }
+  void print_error(const std::string &str) {
+    if (!is_enabled()) {
+      return;
+    }
+    _print_header();
+    concol::color color;
+    color.add_red_bright("ERROR: ");
+    color.add(str);
+    color.print();
   }
   void print_warning(const std::string &str) {
-    if (is_enabled()) {
-      _print_header();
-      concol::color color;
-      color.add_yellow_bright("WARNING: ");
-      color.add(str);
-      color.print();
+    if (!is_enabled()) {
+      return;
     }
+    _print_header();
+    concol::color color;
+    color.add_yellow_bright("WARNING: ");
+    color.add(str);
+    color.print();
   }
   void print_success(const std::string &str) {
-    if (is_enabled()) {
-      _print_header();
-      concol::color color;
-      color.add_green_bright("SUCCESS: ");
-      color.add(str);
-      color.print();
+    if (!is_enabled()) {
+      return;
     }
+    _print_header();
+    concol::color color;
+    color.add_green_bright("SUCCESS: ");
+    color.add(str);
+    color.print();
   }
   void print_info(const std::string &str) {
-    if (is_enabled()) {
-      _print_header();
-      concol::color color;
-      color.add_cyan_bright("INFO: ");
-      color.add(str);
-      color.print();
+    if (!is_enabled()) {
+      return;
     }
+    _print_header();
+    concol::color color;
+    color.add_cyan_bright("INFO: ");
+    color.add(str);
+    color.print();
   }
   void print_critical(const std::string &str) {
-    if (is_enabled()) {
-      _print_header();
+    if (!is_enabled()) {
+      return;
+    }
+    _print_header();
+    concol::color color;
+    color.add_red_bright("FATAL ERROR: ");
+    color.add(str);
+    color.print();
+  }
+  void print_progress(const int percentage, const int max_percentage = 100) {
+    if (!is_enabled()) {
+      return;
+    }
+    _print_header();
+    int complete{max_percentage};
+    if (complete > 100) {
+      complete = 100;
+    }
+    int progress{percentage};
+    if (progress < 0) {
+      progress = 0;
+    }
+    if (progress <= complete) {
       concol::color color;
-      color.add_red_bright("FATAL ERROR: ");
-      color.add(str);
+      color.add_cyan_bright("[");
+      std::string head(progress, '.');
+      std::string tail(complete - percentage, ' ');
+      if (progress < complete) {
+        color.add_yellow_bright(head + tail);
+      } else {
+        color.add_green_bright(head + tail);
+      }
+      color.add_cyan_bright("] ");
+      color.add_white_bright(progress * 100 / complete);
+      color += '%';
+      if (progress < complete) {
+        color += '\r';
+      } else {
+        color += '\n';
+      }
       color.print();
     }
   }
-  void print_progress(const int percentage, const int max_percentage) {
+  void print_nl() {
     if (is_enabled()) {
-      _print_header();
-      int complete{max_percentage};
-      if (complete > 100) {
-        complete = 100;
-      }
-      int progress{percentage};
-      if (progress < 0) {
-        progress = 0;
-      } else if (progress > complete) {
-        concol::color::printf("\r");
-      } else {
-        concol::color color;
-        color.add_cyan_bright("[");
-        std::string head(progress, '.');
-        std::string tail(complete - percentage, ' ');
-        if (progress < complete) {
-          color.add_yellow_bright(head + tail);
-        } else {
-          color.add_green_bright(head + tail);
-        }
-        color.add_cyan_bright("] ");
-        color.add_white_bright(progress * 100 / complete);
-        color += ((progress < complete) ? "%\r" : "%\n");
-        color.print();
-      }
+      _log << '\n';
+    }
+  }
+  void print_rl() {
+    if (is_enabled()) {
+      _log << '\r';
     }
   }
 };

@@ -85,11 +85,17 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) try {
   log << "{+white}message {+cyan}with header ";
   log.stream << "{+white}and message {+yellow}without header{}\n";
 
+  log.print("Progress test: \n");
+
   for (int step{}, max_step{50}; step <= max_step; ++step) {
     log.print_progress(step, max_step);
     std::this_thread::sleep_for(std::chrono::milliseconds(30));
   }
-  
+  for (int step{0}; step <= 100; ++step) {
+    log.print_progress(step);
+    std::this_thread::sleep_for(std::chrono::milliseconds(30));
+  }
+
   log << color_type::magenta_bright << "test ";
   log.stream << color_type::cyan_bright << "is {+yellow}over{+red}!!!";
   log.stream << color_ctrl::reset;
