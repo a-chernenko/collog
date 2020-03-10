@@ -102,10 +102,10 @@ class color_log : public detail::logstream {
  public:
 #ifndef CONCOL_NO_STRING_VIEW
   explicit color_log(const std::string_view &str, bool enable = true)
-      : logstream((enable) ? std::cout.rdbuf() : nullptr), _str{str} {}
+      : logstream{enable}, _str{str} {}
 #else
   explicit color_log(const std::string str, bool enable = true)
-      : logstream((enable) ? std::cout.rdbuf() : nullptr), _str{str} {}
+      : logstream{enable}, _str{str} {}
 #endif
   ~color_log() noexcept = default;
   logstream &stream{*this};
@@ -115,14 +115,14 @@ class color_log : public detail::logstream {
       _print_header();
       _log << std::forward<Type>(rhs);
     }
-    return *this;
+    return stream;
   }
   logstream &operator<<(std::string &&rhs) {
     if (is_enabled()) {
       _print_header();
       concol::color::printf(rhs);
     }
-    return *this;
+    return stream;
   }
 #ifndef CONCOL_NO_STRING_VIEW
   logstream &operator<<(std::string_view &&rhs) {
@@ -130,7 +130,7 @@ class color_log : public detail::logstream {
       _print_header();
       concol::color::printf(rhs);
     }
-    return *this;
+    return stream;
   }
 #endif
   logstream &operator<<(const char *rhs) {
@@ -138,7 +138,7 @@ class color_log : public detail::logstream {
       _print_header();
       concol::color::printf(rhs);
     }
-    return *this;
+    return stream;
   }
   void print(const std::string &str) {
     if (is_enabled()) {
