@@ -48,8 +48,9 @@ class logstream {
   std::ostream _log;
 
   explicit logstream(bool log_enable)
-      : logstream{(log_enable) ? std::cout.rdbuf() : nullptr} {}
-  explicit logstream(std::streambuf *buf_ptr = {}) : _log{buf_ptr} {}
+      : _log{(log_enable) ? std::cerr.rdbuf() : nullptr} {
+    concol::color::set_ostream(stderr);
+  }
   ~logstream() noexcept = default;
 
  public:
@@ -67,7 +68,7 @@ class logstream {
     return *this;
   }
 #ifndef CONCOL_NO_STRING_VIEW
-  logstream &operator<<(const std::string_view &rhs) {
+  logstream &operator<<(std::string_view &&rhs) {
     if (_enabled) {
       concol::color::printf(rhs);
     }
@@ -119,7 +120,7 @@ class color_log : public detail::logstream {
   logstream &operator<<(std::string &&rhs) {
     if (is_enabled()) {
       _print_header();
-      concol::color::printf(rhs.c_str());
+      concol::color::printf(rhs);
     }
     return *this;
   }
@@ -127,7 +128,7 @@ class color_log : public detail::logstream {
   logstream &operator<<(std::string_view &&rhs) {
     if (is_enabled()) {
       _print_header();
-      concol::color::printf(rhs.data());
+      concol::color::printf(rhs);
     }
     return *this;
   }
@@ -142,7 +143,7 @@ class color_log : public detail::logstream {
   void print(const std::string &str) {
     if (is_enabled()) {
       _print_header();
-      _log << str;
+      concol::color::printf(str);
     }
   }
   void print_error(const std::string &str) {
