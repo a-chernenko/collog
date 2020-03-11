@@ -56,8 +56,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) try {
   log << test_header + color::to_string("{+red}ERROR{}\n");
 
 #ifndef CONCOL_NO_STRING_VIEW
-  log << test header << color_type::green_bright << "OK\n"sv;
-  log << test_header << color_type::red_bright << "ERROR\n"sv;
+  log << test_header.c_str() << color_type::green_bright << "OK\n"sv;
+  log << test_header.c_str() << color_type::red_bright << "ERROR\n"sv;
 #endif
   log << color::to_string("{+white}value{}: {+yellow}%d{}\n", 128);
   log << "{+white}value{}: " << color_type::yellow_bright << 128
