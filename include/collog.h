@@ -221,7 +221,7 @@ class color_log : public detail::logstream {
       }
       color.add_cyan_bright("] ");
       color.add_white_bright(progress * 100 / complete);
-      color += '%';
+      color += "%";
       if (progress < complete) {
         color += '\r';
       } else {
