@@ -12,8 +12,8 @@ endif()
 
 include_directories(
 	include
-	CoNCoL/include
+	concol/include
 )
 
-add_subdirectory(CoNCoL)
+add_subdirectory(concol)
 add_subdirectory(test)
