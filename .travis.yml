@@ -1,1 +1,3 @@
+language: CPP
+os: linux
 compiler: gcc
