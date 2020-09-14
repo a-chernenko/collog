@@ -89,23 +89,20 @@ class logstream {
 
 class color_log : public detail::logstream {
 #ifndef CONCOL_NO_STRING_VIEW
-  const std::string_view _str;
+  const std::string_view _header_str;
 #else
-  const std::string _str;
+  const std::string _header_str;
 #endif
 
-  void _print_header() {
-    _log << concol::color_type::black_bright << "[" << _str << "] "
-         << concol::color_ctrl::reset;
-  }
+  void _print_header() { concol::color::printf(_header_str); }
 
  public:
 #ifndef CONCOL_NO_STRING_VIEW
-  explicit color_log(const std::string_view &str, bool enable = true)
-      : logstream{enable}, _str{str} {}
+  explicit color_log(const std::string_view &header_str, bool enable = true)
+      : logstream{enable}, _header_str{header_str} {}
 #else
-  explicit color_log(const std::string str, bool enable = true)
-      : logstream{enable}, _str{str} {}
+  explicit color_log(const std::string header_str, bool enable = true)
+      : logstream{enable}, _header_str{header_str} {}
 #endif
   ~color_log() noexcept = default;
   logstream &stream{*this};

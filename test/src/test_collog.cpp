@@ -43,7 +43,7 @@ using namespace std::string_view_literals;
 #endif
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) try {
-  color_log log("LOG NAME", true);
+  color_log log("{cyan}LOG NAME{+black} | {}", true);
   color::set_enabled(true);
   log.set_enabled(true);
 
