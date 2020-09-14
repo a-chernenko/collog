@@ -93,7 +93,6 @@ class color_log : public detail::logstream {
 #else
   const std::string _header_str;
 #endif
-
   void _print_header() { concol::color::printf(_header_str); }
 
  public:
